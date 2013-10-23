@@ -12,6 +12,7 @@
 !/vendor/pouchdb-utils.js
 
 # misc
+/coverage
 /.sass-cache
 /connect.lock
 /libpeerconnection.log
