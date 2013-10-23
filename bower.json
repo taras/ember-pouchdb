@@ -1,0 +1,30 @@
+{
+  "name": "ember-pouchdb",
+  "dependencies": {
+    "handlebars": "1.0.0",
+    "jquery": "~1.9.1",
+    "qunit": "~1.12.0",
+    "ember": "1.0.0",
+    "pouchdb-nightly.js": "http://download.pouchdb.com/pouchdb-nightly.js"
+  },
+  "version": "0.1.0",
+  "homepage": "https://github.com/taras/ember-pouchdb",
+  "authors": [
+    "Taras Mankovski <tarasm@gmail.com>"
+  ],
+  "description": "PouchDB Wrapper for Ember.js",
+  "keywords": [
+    "ember.js",
+    "pouchdb",
+    "couchdb"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor",
+    "test",
+    "tests"
+  ]
+}

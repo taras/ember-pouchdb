@@ -1,0 +1,38 @@
+{
+  "name": "ember-pouchdb",
+  "version": "0.1.0",
+  "description": "PouchDB Wrapper for Ember.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "grunt server",
+    "build": "grunt build",
+    "test": "grunt test:ci",
+    "postinstall": "./node_modules/.bin/bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taras/ember-pouchdb.git"
+  },
+  "keywords": [
+    "PouchDB",
+    "Ember.js",
+    "CouchDB"
+  ],
+  "author": "Taras Mankovski <tarasm@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/taras/ember-pouchdb/issues"
+  },
+  "dependencies": {
+    "grunt-microlib": "~0.1.1",
+    "karma": "~0.9.4",
+    "grunt-karma": "~0.5",
+    "karma-qunit": "~0.0.3",
+    "karma-coverage": "~0.0.3",
+    "karma-phantomjs-launcher": "~0.0.2",
+    "bower": "~1.2.7",
+    "grunt-release": "~0.6.0",
+    "grunt": "~0.4.1",
+    "grunt-browserify": "~1.0.5"
+  }
+}
