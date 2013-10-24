@@ -3,8 +3,20 @@ module.exports = function(grunt) {
   var emberConfig = require('grunt-microlib').init.bind(this)(grunt);
   grunt.loadNpmTasks('grunt-microlib');
 
-  grunt.registerTask('test', "Run your apps's tests once. Uses Google Chrome by default. Logs coverage output to tmp/public/coverage.", [
-                     'build', 'browserify:tests', 'karma:test' ]);
+ 	grunt.registerTask('build', "Builds a distributable version of <%= cfg.name %>", 
+		['clean', 
+		'transpile:amd', 
+		'transpile:commonjs', 
+		'concat:amd', 
+		'concat:browser', 
+		'browser:dist',
+		'browser:distNoVersion', 
+		'jshint', 
+		'uglify:browser']
+	);
+
+  grunt.registerTask('test', "Run your apps's tests once. Uses Google Chrome by default. Logs coverage output to tmp/public/coverage.", 
+		[ 'browserify:tests', 'karma:test' ]);
 
   var config = {
     cfg: {
@@ -19,10 +31,12 @@ module.exports = function(grunt) {
     },
     env: process.env,
 
-    pkg: grunt.file.readJSON('package.json'),
+    pkg: grunt.file.readJSON('bower.json'),
 
-    browserify: require('./options/browserify.js'),
-    karma: require('./options/karma.js')    
+    browser: require('./options/browser'),
+    browserify: require('./options/browserify'),
+    karma: require('./options/karma'),
+    release: require('./options/release')
   };
 
   // Merge config into emberConfig, overwriting existing settings
@@ -30,4 +44,5 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-release');
 };

@@ -13,7 +13,7 @@ module.exports = function(config) {
       'vendor/handlebars/handlebars.js',
       'vendor/ember/ember.js',
       'vendor/pouchdb-nightly.js/index.js',
-      'dist/ember-pouchdb-0.1.0.js',
+      'dist/ember-pouchdb.js',
       'tmp/tests-bundle.js',
       'test/test_helper.js'
     ],
@@ -30,7 +30,7 @@ module.exports = function(config) {
     ],
 
     preprocessors: {
-      'dist/ember-pouchdb-0.1.0.js': 'coverage'
+      'dist/ember-pouchdb.js': 'coverage'
     },
 
     // list of files to exclude
