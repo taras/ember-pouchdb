@@ -1,6 +1,6 @@
 {
   "name": "ember-pouchdb",
-  "version": "0.1.1",
+  "version": null,
   "main": "dist/ember-pouchdb.js",
   "dependencies": {
     "handlebars": "1.0.0",
