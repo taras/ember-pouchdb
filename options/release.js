@@ -1,6 +1,6 @@
 module.exports = {
     options: {
-      file: 'bower.json',
+			bump: false,
       npm: false, //default: true
       npmtag: true, //default: no tag
       github: { 

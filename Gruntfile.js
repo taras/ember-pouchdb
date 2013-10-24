@@ -32,7 +32,8 @@ module.exports = function(grunt) {
     env: process.env,
 
     pkg: grunt.file.readJSON('bower.json'),
-
+		
+		bump: require('./options/bump'),
     browser: require('./options/browser'),
     browserify: require('./options/browserify'),
     karma: require('./options/karma'),
@@ -45,4 +46,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-release');
+  grunt.loadNpmTasks('grunt-bump');	
 };
