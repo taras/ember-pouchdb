@@ -37,7 +37,8 @@ module.exports = function(grunt) {
     browser: require('./options/browser'),
     browserify: require('./options/browserify'),
     karma: require('./options/karma'),
-    release: require('./options/release')
+    release: require('./options/release'),
+		shell: require('./options/shell')
   };
 
   // Merge config into emberConfig, overwriting existing settings
@@ -47,4 +48,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-release');
   grunt.loadNpmTasks('grunt-bump');	
+  grunt.loadNpmTasks('grunt-shell');		
 };
