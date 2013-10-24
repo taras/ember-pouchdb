@@ -269,8 +269,10 @@ Delete the database and return a promise that will resolve after the database wa
 
 ### Run Tests
 
-Terminal: ```grunt test```
-Browser: 
+**In terminal**: ```grunt test```
+
+**In browser**: 
+
 1. ```grunt server``` 
 2. Go to [http://localhost:8000/test](http://localhost:8000/test)
 
