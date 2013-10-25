@@ -12,6 +12,7 @@ module.exports = {
 			'dist/ember-pouchdb.amd.js'], // '-a' for all files
     createTag: true,
     push: true,
+    pushTo: 'origin',
     gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d' // options to use with '$ git describe'
   }
 }
