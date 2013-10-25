@@ -10,8 +10,8 @@ module.exports = {
 			'dist/ember-pouchdb.js',
 			'dist/ember-pouchdb.min.js', 
 			'dist/ember-pouchdb.amd.js'], // '-a' for all files
-    createTag: false,
-    push: false,
+    createTag: true,
+    push: true,
     gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d' // options to use with '$ git describe'
   }
 }
