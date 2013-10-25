@@ -76,7 +76,10 @@ define("ember-pouchdb/model",
     "use strict";
     var Model = Ember.Object.extend( Ember.Copyable, {
       copy: function() {
-        return this.constructor.create(this.serialize());
+        var serialized  = this.serialize();
+        serialized.id   = this.get('id');
+        serialized.rev  = this.get('rev');
+        return this.constructor.create(serialized);
       },
       serialize: function() {
         throw new Error(Ember.String.fmt("%@ must implement serialize() method which returns JSON of this model.", [this]));
@@ -194,7 +197,9 @@ define("ember-pouchdb/storage",
 
         var createModels = function(docs) {
           return Em.A(docs.rows).map(function(doc){
-            return Em.run(modelClass, 'create', doc.value);
+            var model = modelClass.create(doc.value);
+            model.setProperties({id:doc.value._id, rev:doc.value._rev});
+            return model;
           });
         };
 
