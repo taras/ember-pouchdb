@@ -4,7 +4,12 @@ module.exports = {
     updateConfigs: ['pkg'],
     commit: true,
     commitMessage: 'Bump %VERSION%',
-    commitFiles: ['package.json', 'bower.json', 'dist'], // '-a' for all files
+    commitFiles: [
+			'package.json', 
+			'bower.json',
+			'dist/ember-pouchdb.js',
+			'dist/ember-pouchdb.min.js', 
+			'dist/ember-pouchdb.amd.js'], // '-a' for all files
     createTag: false,
     push: false,
     gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d' // options to use with '$ git describe'
