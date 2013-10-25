@@ -23,16 +23,15 @@ It is currently tested in:
 
 This library requires PouchDB library to be included in the page before this library.
 
-[PouchDB](http://download.pouchdb.com/pouchdb-nightly.js) or checkout more [download option](http://download.pouchdb.com/)
-
-**Ember PouchDB**
-* [Unminified](https://raw.github.com/taras/ember-pouchdb/master/dist/ember-pouchdb.js)
-* [Minified & AMD versions](https://github.com/taras/ember-pouchdb/tree/master/dist)
+* [PouchDB](http://download.pouchdb.com/pouchdb-nightly.js) or checkout more [download option](http://download.pouchdb.com/) 
+* [Ember PouchDB Unminified](https://raw.github.com/taras/ember-pouchdb/master/dist/ember-pouchdb.js)
 
 ```html
 <script src="http://download.pouchdb.com/pouchdb-nightly.js"></script>
 <script src="https://raw.github.com/taras/ember-pouchdb/master/dist/ember-pouchdb.js"></script>
 ```
+
+* [Minified & AMD versions](https://github.com/taras/ember-pouchdb/tree/master/dist)
 
 #### with Bower
 
@@ -47,12 +46,11 @@ This library requires PouchDB library to be included in the page before this lib
 
 ## Usage
 
-You can use the API via an app instance or via an injected property(recommended).
+You can use the API via an app instance or dependancy injection.
 
-### Global Example
+### App instance Example
 
-If you're not using [Ember App Kit](https://github.com/stefanpenner/ember-app-kit) and you have access to the App instance, then you can use this method.
-
+Use this method if you're not using [Ember App Kit](https://github.com/stefanpenner/ember-app-kit) or ES6 Modules.
 ```javascript
 var App = Ember.Application.create();
 
@@ -90,9 +88,9 @@ App.PhotoRoute = Ember.Route.extend({
 });
 ```
 
-### Injected Property
+### Dependancy Injection
 
-If you're using [Ember App Kit](https://github.com/stefanpenner/ember-app-kit) then you should use Ember's dependancy injection mechanism to create a PouchDB instance that's available in Routes and Controllers.
+Use this method with [Ember App Kit](https://github.com/stefanpenner/ember-app-kit) or ES6 Modules.
 
 **app/app.js**
 ```javascript
@@ -242,7 +240,7 @@ Implements [CopyableMixin](http://emberjs.com/api/classes/Ember.Copyable.html) a
 
 Retrieve a document with the provided id and return a promise that will resolve to an instance of a model of the retrieved document.
 
-#### EPDB.Storage#POST(model)
+##### EPDB.Storage#POST(model)
 
 Create a document in the database for the provided model and return a promise that will resolve to a model with **id** and **rev** for the created document.
 
@@ -271,11 +269,22 @@ Delete the database and return a promise that will resolve after the database wa
 
 ### Run Tests
 
-Terminal: ```grunt test```
-Browser: 
+**In terminal**: ```grunt test```
+
+**In browser**: 
+
 1. ```grunt server``` 
 2. Go to [http://localhost:8000/test](http://localhost:8000/test)
 
 ### Release
 
+<<<<<<< HEAD
 ```$ grunt release[:patch|minor|major|git]```
+=======
+1. grunt bump-only
+2. grunt build
+3. grunt test
+4. grunt shell:git-add
+5. grunt bump-commit
+6. grunt release
+>>>>>>> 4dba19c6cb4e81bc586bb4e49aca7dafbbd41171
