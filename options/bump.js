@@ -3,7 +3,7 @@ module.exports = {
     files: ['package.json','bower.json'],
     updateConfigs: ['pkg'],
     commit: true,
-    commitMessage: 'Bump %VERSION%',
+    commitMessage: 'Release %VERSION%',
     commitFiles: [
 			'package.json', 
 			'bower.json',

@@ -11,7 +11,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('release', function(versionType){
 		if (typeof versionType === 'undefined') versionType = 'patch'
-		grunt.task.run(['build','test','bump'+versionType])
+		grunt.task.run(['build','test','bump:'+versionType])
 	});
 
 	var config = {
@@ -25,9 +25,7 @@ module.exports = function(grunt) {
 		bump: 			require('./options/bump'),
 	  browser: 		require('./options/browser'),
 	  browserify: require('./options/browserify'),
-	  karma: 			require('./options/karma'),
-	  release: 		require('./options/release'),
-		shell: 			require('./options/shell')
+	  karma: 			require('./options/karma')
 	};
 
 	// Merge config into emberConfig, overwriting existing settings
