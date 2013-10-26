@@ -266,7 +266,7 @@ Retrieve from the database all documents of the specified type and return a prom
 
 ##### EPDB.Storage#remove()
 
-Delete the database and return a promise that will resolve after the database was deleted.
+Delete the database and return a promise that will resolve after the database.
 
 ## Development
 

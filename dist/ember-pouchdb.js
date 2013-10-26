@@ -148,16 +148,28 @@ define("ember-pouchdb/storage",
        * @type {Object}
        */
       docTypes: {},
-      /**
-       * Database instance
-       * @type {Pouch}
-       */
-      db: null,
       init: function() {
         var that = this;
-        Ember.run(function(){
-          that.set('db', that.create());
+        this.getDB().then(function(db){
+          that.set('_db', db);
         });
+      },
+      getDB: function(dbName, options) {
+        var that = this, getDB;
+    
+        getDB = function(resolve, reject) {
+          var db = that.get('_db'), dbPromise;
+          if (Em.isEmpty(db)) {
+            if (Em.isEmpty(that.get('_dbPromise'))) {
+              that.set('_dbPromise', that.create(dbName,options));
+            }
+            resolve(that.get('_dbPromise'));
+          } else {
+            resolve(db);
+          }
+        };
+    
+        return new Ember.RSVP.Promise(getDB);
       },
       /**
        * Create database by name
@@ -240,7 +252,7 @@ define("ember-pouchdb/storage",
           });
         };
 
-        return this.get('db').then(queryByDocType).then(createModels);
+        return this.getDB().then(queryByDocType).then(createModels);
       },
       /**
        * Get a document by id, return a promise that will resolve to an instance of PouchModel
@@ -293,7 +305,7 @@ define("ember-pouchdb/storage",
           return model;
         };
 
-        return this.get('db').then(getDoc).then(createModel);
+        return this.getDB().then(getDoc).then(createModel);
       },
       /**
        * Create a new document and let PouchDB generate an _id for it.
@@ -333,7 +345,7 @@ define("ember-pouchdb/storage",
           return model;
         };
 
-        return this.get('db').then(postDoc).then(addDocInfo);
+        return this.getDB().then(postDoc).then(addDocInfo);
       },
       /** 
        * Update an existing document.
@@ -379,7 +391,7 @@ define("ember-pouchdb/storage",
           return model;
         };
 
-        return this.get('db').then(putDoc).then(updateModel);
+        return this.getDB().then(putDoc).then(updateModel);
       },
       /** 
        * Delete document for a model
@@ -415,35 +427,23 @@ define("ember-pouchdb/storage",
           });      
         };
 
-        return this.get('db').then(removeDoc);
+        return this.getDB().then(removeDoc);
       },
       /**
        * Remove the database
        * @return {promise}
        */
       remove: function(options) {
-        var 
-          that = this,
-          db = this.get('db'),
-          dbName = that.get('dbName');
+    
+        var that = this, dbName = that.get('dbName');
 
         if ( typeof options === 'undefined' ) {
           options = {};
         }
-
-        var destroyDB = function(resolve, reject){
-          Pouch.destroy(dbName, options, function(error, info){
-            Ember.run(function(){
-              if ( error ) {
-                reject(error);
-              } else {
-                resolve();
-              }
-            });
-          });
-        };
-
-        return new Ember.RSVP.Promise(destroyDB);
+    
+        Ember.run.scheduleOnce('destroy', Pouch, 'destroy', dbName, options);
+    
+        return this;
       },
       getDocType: function(modelClass) {
         var 
@@ -458,7 +458,6 @@ define("ember-pouchdb/storage",
         return found;
       }
     });
-
     __exports__.Storage = Storage;
   });
 define("ember-pouchdb",

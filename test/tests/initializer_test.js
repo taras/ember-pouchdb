@@ -39,17 +39,23 @@ module("Additional Initializer", {
   }
 });
 
-test('multiple databases', function() {
+asyncTest('multiple databases', function() {
   expect(6);
 
   var main = App.__container__.lookup('pouch:main');
   equal(Em.typeOf(main), 'instance');
   equal(main.get('dbName'), "PouchDB");
-  ok(main.get('db') instanceof Ember.RSVP.Promise);
+  main.getDB().then(function(db){
+    ok(db);
+    start();
+  });
 
   var blog = App.__container__.lookup('pouch:blog');
   equal(Em.typeOf(blog), 'instance');
-  equal(blog.get('dbName'), 'testing-blog');    
-  ok(blog.get('db') instanceof Ember.RSVP.Promise);
+  equal(blog.get('dbName'), 'testing-blog');
+  blog.getDB().then(function(db){
+    ok(db);
+    start();
+  });
 
 });
