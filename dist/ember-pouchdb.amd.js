@@ -113,26 +113,20 @@ define("ember-pouchdb/storage",
       docTypes: {},
       init: function() {
         var that = this;
-        this.getDB().then(function(db){
-          that.set('_db', db);
-        });
+        this.getDB();
       },
       getDB: function(dbName, options) {
-        var that = this, getDB;
+        var that = this, promise = this.get('_dbPromise');
     
-        getDB = function(resolve, reject) {
-          var db = that.get('_db'), dbPromise;
-          if (Em.isEmpty(db)) {
-            if (Em.isEmpty(that.get('_dbPromise'))) {
-              that.set('_dbPromise', that.create(dbName,options));
-            }
-            resolve(that.get('_dbPromise'));
-          } else {
-            resolve(db);
-          }
-        };
-    
-        return new Ember.RSVP.Promise(getDB);
+        if ( Em.isEmpty(promise) ) {
+          promise = this.create(dbName, options);
+          promise.then(function(db){
+            that.set('_db', db);
+            return db;
+          });
+          this.set('_dbPromise', promise);
+        }
+        return promise;
       },
       /**
        * Create database by name
