@@ -35,13 +35,13 @@ var define, requireModule;
   };
 })();
 
-define("ember-pouchdb/initializer",
+define("ember-pouchdb/get_initializer",
   ["ember-pouchdb/storage","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
     var Storage = __dependency1__.Storage;
 
-    var initializer = function(options, initialize) {
+    var get_initializer = function(options, initialize) {
 
       options = Ember.merge({
         /**
@@ -91,8 +91,8 @@ define("ember-pouchdb/initializer",
       if ( typeof initialize === 'undefined' ) {
         initialize = function(container, application) {
           application.register(options.fullName, Storage.extend({
-            dbName: options.dbName,
-            docTypes: options.docTypes
+            dbName: application.get('pouch.dbName') || options.dbName,
+            docTypes: application.get('pouch.docTypes') || options.docTypes
           }));
           options.types.forEach(function(type){
             application.inject(type, options.propName, options.fullName);
@@ -105,7 +105,7 @@ define("ember-pouchdb/initializer",
       return options;
     };
 
-    __exports__.initializer = initializer;
+    __exports__.get_initializer = get_initializer;
   });
 define("ember-pouchdb/model",
   ["exports"],
@@ -428,16 +428,26 @@ define("ember-pouchdb/storage",
        * @return {promise}
        */
       remove: function(options) {
-    
+
         var that = this, dbName = that.get('dbName');
 
         if ( typeof options === 'undefined' ) {
           options = {};
         }
-    
-        Ember.run.scheduleOnce('destroy', Pouch, 'destroy', dbName, options);
-    
-        return this;
+
+        var removeDB = function(resolve, reject){
+          Pouch.destroy(dbName, function(error, info){
+            Ember.run(function(){
+              if (error) {
+                reject(error);
+              } else {
+                resolve(info);
+              }          
+            });
+          });
+        };
+
+        return new Ember.RSVP.Promise(removeDB);
       },
       getDocType: function(modelClass) {
         var 
@@ -455,14 +465,14 @@ define("ember-pouchdb/storage",
     __exports__.Storage = Storage;
   });
 define("ember-pouchdb",
-  ["ember-pouchdb/initializer","ember-pouchdb/model","ember-pouchdb/storage","exports"],
+  ["ember-pouchdb/get_initializer","ember-pouchdb/model","ember-pouchdb/storage","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
-    var initializer = __dependency1__.initializer;
+    var get_initializer = __dependency1__.get_initializer;
     var Model = __dependency2__.Model;
     var Storage = __dependency3__.Storage;
 
-    __exports__.initializer = initializer;
+    __exports__.get_initializer = get_initializer;
     __exports__.Model = Model;
     __exports__.Storage = Storage;
   });

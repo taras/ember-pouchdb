@@ -11,7 +11,7 @@ test("option setting", function(){
     dbName: "some-app",
     types: ['controller']
   };
-  var result = EPDB.initializer(expected);
+  var result = EPDB.get_initializer(expected);
   equal(result.name, "Secondary");
   equal(result.dbName, "some-app");
   equal(result.types, expected.types);
@@ -21,8 +21,8 @@ test("option setting", function(){
 module("Additional Initializer", {
   setup: function(){
     App = startApp({}, [
-      EPDB.initializer(),    
-      EPDB.initializer({
+      EPDB.get_initializer(),    
+      EPDB.get_initializer({
         name:       "Blog PouchDB",
         propName:   "blog",
         dbName:     "testing-blog",
