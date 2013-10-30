@@ -2,6 +2,8 @@ document.write('<div id="ember-testing-container"><div id="ember-testing"></div>
 
 Ember.testing = true;
 
+Ember.Application.initializer(EPDB.get_initializer());
+
 window.startApp = function startApp(attrs, initializers) {
   var App;
 

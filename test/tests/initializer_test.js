@@ -20,15 +20,13 @@ test("option setting", function(){
 
 module("Additional Initializer", {
   setup: function(){
-    App = startApp({}, [
-      EPDB.get_initializer(),    
-      EPDB.get_initializer({
+    var initializers = [EPDB.get_initializer({
         name:       "Blog PouchDB",
         propName:   "blog",
         dbName:     "testing-blog",
         fullName:   "pouch:blog"
-      })
-    ]);
+      })];
+    App = startApp({}, initializers);
   },
   teardown: function() {
     Ember.run(function(){
@@ -47,15 +45,33 @@ asyncTest('multiple databases', function() {
   equal(main.get('dbName'), "PouchDB");
   main.getDB().then(function(db){
     ok(db);
-    start();
   });
 
   var blog = App.__container__.lookup('pouch:blog');
   equal(Em.typeOf(blog), 'instance');
   equal(blog.get('dbName'), 'testing-blog');
   blog.getDB().then(function(db){
-    ok(db);
     start();
+    ok(db);
   });
 
+});
+
+module("Promise Tracker", {
+  setup: function(){
+    App = startApp();
+  },
+  teardown: function() {
+    Ember.run(function(){
+      App.__container__.lookup('pouch:main').remove();
+      App.destroy();
+    });
+  }
+});
+
+asyncTest("is present", function(){
+  expect(1);
+  var main = App.__container__.lookup('pouch:main');
+  start();
+  ok(main.tracker);
 });

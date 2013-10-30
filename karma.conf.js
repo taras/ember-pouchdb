@@ -11,7 +11,7 @@ module.exports = function(config) {
     files: [
       'vendor/jquery/jquery.js',
       'vendor/handlebars/handlebars.js',
-      'vendor/ember/ember.js',
+      'vendor/ember-canary/index.js',
       'vendor/pouchdb-nightly.js/index.js',
       'dist/ember-pouchdb.js',
       'tmp/tests-bundle.js',

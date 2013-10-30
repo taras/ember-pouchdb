@@ -1,8 +1,9 @@
 define("ember-pouchdb/get_initializer",
-  ["ember-pouchdb/storage","exports"],
-  function(__dependency1__, __exports__) {
+  ["ember-pouchdb/storage","ember-pouchdb/promise_tracker","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
     var Storage = __dependency1__.Storage;
+    var PromiseTracker = __dependency2__.PromiseTracker;
 
     var get_initializer = function(options, initialize) {
 
@@ -60,7 +61,14 @@ define("ember-pouchdb/get_initializer",
           options.types.forEach(function(type){
             application.inject(type, options.propName, options.fullName);
           });
-        };    
+      
+          if ( Ember.testing ) {
+            // Inject Promise Tracker into the storage instance
+            application.register("promiseTracker:pouch", PromiseTracker);
+            application.inject(options.fullName, "tracker", "promiseTracker:pouch");
+          }
+      
+        };
       }
 
       options['initialize'] = initialize;
@@ -87,6 +95,35 @@ define("ember-pouchdb/model",
     });
 
     __exports__.Model = Model;
+  });
+define("ember-pouchdb/promise_tracker",
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var PromiseTracker = Ember.ArrayProxy.extend({
+      init: function(){
+        var that = this;
+        // register a Waiter function if wait-hooks feature is available
+        if ( Ember.FEATURES.isEnabled('ember-testing-wait-hooks') ) {
+          Ember.Test.registerWaiter(function() {
+             return that.areFulfilled() === true;
+          });      
+        }
+        this.set('content', []);
+      },
+      newPromise: function(callback) {
+        // save a reference to it in the tracker and return a new promise
+        var promise = Ember.RSVP.Promise(callback);
+        this.pushObject(promise);
+        return promise;
+      },
+      areFulfilled: function(){
+        // return true if all promises are fulfilled
+        return this.everyBy('isFulfilled');
+      }
+    });
+
+    __exports__.PromiseTracker = PromiseTracker;
   });
 define("ember-pouchdb/storage",
   ["ember-pouchdb/model","exports"],
@@ -158,7 +195,7 @@ define("ember-pouchdb/storage",
           });
         };
 
-        return new Ember.RSVP.Promise(createDB);
+        return this._newPromise(createDB);
       },
       /**
        * Get all docs of specific docType. The docs will be converted into models before being returned.
@@ -188,7 +225,7 @@ define("ember-pouchdb/storage",
         };
 
         var queryByDocType = function(db){
-          return new Ember.RSVP.Promise(function(resolve, reject){
+          return that._newPromise(function(resolve, reject){
             db.query({map: findByDocType}, options, function(error, response){
               Ember.run(function(){
                 if ( error ) {
@@ -238,7 +275,7 @@ define("ember-pouchdb/storage",
         var that = this;
 
         var getDoc = function(db){
-          return new Ember.RSVP.Promise(function(resolve, reject){
+          return that._newPromise(function(resolve, reject){
             db.get(id, options, function(error, response){
               Ember.run(function(){
                 if (error) {
@@ -282,7 +319,7 @@ define("ember-pouchdb/storage",
         doc['docType'] = docType;
 
         var postDoc = function(db){
-          return new Ember.RSVP.Promise(function(resolve, reject){
+          return that._newPromise(function(resolve, reject){
             db.post(doc, options, function(error, response){
               Ember.run(function(){
                 if ( error ) {
@@ -330,7 +367,7 @@ define("ember-pouchdb/storage",
         doc["_rev"] = model.get("rev");
 
         var putDoc = function(db){
-          return new Ember.RSVP.Promise(function(resolve, reject){
+          return that._newPromise(function(resolve, reject){
             db.put(doc, options, function(error, response) {
               Ember.run(function(){
                 if ( error ) {
@@ -371,7 +408,7 @@ define("ember-pouchdb/storage",
         };
 
         var removeDoc = function(db){
-          return new Ember.RSVP.Promise(function(resolve, reject){
+          return that._newPromise(function(resolve, reject){
             db.remove(doc, options, function(error, response) {
               Ember.run(function(){
                 if (error) {
@@ -410,7 +447,7 @@ define("ember-pouchdb/storage",
           });
         };
 
-        return new Ember.RSVP.Promise(removeDB);
+        return this._newPromise(removeDB);
       },
       getDocType: function(modelClass) {
         var 
@@ -423,6 +460,20 @@ define("ember-pouchdb/storage",
           return found;
         });
         return found;
+      },
+      /**
+       * Return a new promise, create a tracked promise if promise tracker is available
+       * @param {function} callback
+       * @return {promise}
+       */
+      _newPromise: function(callback) {
+        var promise;
+        if ( this.tracker != null ) {
+          promise = this.tracker.newPromise(callback);
+        } else {
+          promise = new Ember.RSVP.Promise(callback);
+        }
+        return promise;
       }
     });
     __exports__.Storage = Storage;
