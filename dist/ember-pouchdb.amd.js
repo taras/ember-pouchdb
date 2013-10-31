@@ -154,7 +154,7 @@ define("ember-pouchdb/storage",
       },
       getDB: function(dbName, options) {
         var that = this, promise = this.get('_dbPromise');
-    
+
         if ( Em.isEmpty(promise) ) {
           promise = this.create(dbName, options);
           promise.then(function(db){
@@ -183,7 +183,7 @@ define("ember-pouchdb/storage",
         }
 
         var createDB = function(resolve, reject){
-          new Pouch(name, options, function(error, db){
+          var _createDB = function(error, db){
             Ember.run(function(){
               if ( error ) {
                 reject(error);
@@ -191,8 +191,8 @@ define("ember-pouchdb/storage",
                 resolve(db);
               }
             });
-
-          });
+          };
+          new Pouch(name, options, _createDB);
         };
 
         return this._newPromise(createDB);
@@ -225,8 +225,8 @@ define("ember-pouchdb/storage",
         };
 
         var queryByDocType = function(db){
-          return that._newPromise(function(resolve, reject){
-            db.query({map: findByDocType}, options, function(error, response){
+          var promise = that._newPromise(function(resolve, reject){
+            var _queryByDocType = function(error, response){
               Ember.run(function(){
                 if ( error ) {
                   reject(error);
@@ -234,8 +234,10 @@ define("ember-pouchdb/storage",
                   resolve(response);
                 }
               });
-            });
-          });      
+            };
+            db.query({map: findByDocType}, options, _queryByDocType);     
+          });
+          return promise;
         };
 
         var createModels = function(docs) {
@@ -275,8 +277,8 @@ define("ember-pouchdb/storage",
         var that = this;
 
         var getDoc = function(db){
-          return that._newPromise(function(resolve, reject){
-            db.get(id, options, function(error, response){
+          var promise = that._newPromise(function(resolve, reject){
+            var _getDoc = function(error, response){
               Ember.run(function(){
                 if (error) {
                   reject(error);
@@ -284,9 +286,11 @@ define("ember-pouchdb/storage",
                   resolve(response);
                 }
               });
-            });
+            };
+            db.get(id, options, _getDoc);
           });
-        };
+          return promise;
+        }
 
         var createModel = function(doc) {
           var model;
@@ -319,8 +323,8 @@ define("ember-pouchdb/storage",
         doc['docType'] = docType;
 
         var postDoc = function(db){
-          return that._newPromise(function(resolve, reject){
-            db.post(doc, options, function(error, response){
+          var promise = that._newPromise(function(resolve, reject){
+            var _postDoc = function(error, response){
               Ember.run(function(){
                 if ( error ) {
                   reject(error);
@@ -328,8 +332,10 @@ define("ember-pouchdb/storage",
                   resolve(response);
                 }
               });
-            });
+            };
+            db.post(doc, options, _postDoc);
           });
+          return promise;
         };
 
         var addDocInfo = function(info) {
@@ -367,8 +373,8 @@ define("ember-pouchdb/storage",
         doc["_rev"] = model.get("rev");
 
         var putDoc = function(db){
-          return that._newPromise(function(resolve, reject){
-            db.put(doc, options, function(error, response) {
+          var promise = that._newPromise(function(resolve, reject){
+            var _putDoc = function(error, response) {
               Ember.run(function(){
                 if ( error ) {
                   reject(error);
@@ -376,9 +382,11 @@ define("ember-pouchdb/storage",
                   resolve(response);
                 }
               });
-            });
+            };
+            db.put(doc, options, _putDoc);
           });
-        };
+          return promise;
+        }
 
         var updateModel = function(doc) {
           model.setProperties({id: doc.id, rev: doc.rev});
@@ -408,8 +416,8 @@ define("ember-pouchdb/storage",
         };
 
         var removeDoc = function(db){
-          return that._newPromise(function(resolve, reject){
-            db.remove(doc, options, function(error, response) {
+          var promise = that._newPromise(function(resolve, reject){
+            var _removeDoc = function(error, response) {
               Ember.run(function(){
                 if (error) {
                   reject(error);
@@ -417,8 +425,10 @@ define("ember-pouchdb/storage",
                   resolve();
                 }
               });
-            });
-          });      
+            };
+            db.remove(doc, options, _removeDoc);
+          });
+          return promise;
         };
 
         return this.getDB().then(removeDoc);
@@ -436,7 +446,7 @@ define("ember-pouchdb/storage",
         }
 
         var removeDB = function(resolve, reject){
-          Pouch.destroy(dbName, function(error, info){
+          var _removeDB = function(error, info){
             Ember.run(function(){
               if (error) {
                 reject(error);
@@ -444,7 +454,8 @@ define("ember-pouchdb/storage",
                 resolve(info);
               }          
             });
-          });
+          };
+          Pouch.destroy(dbName, _removeDB);
         };
 
         return this._newPromise(removeDB);
@@ -470,12 +481,14 @@ define("ember-pouchdb/storage",
         var promise;
         if ( this.tracker != null ) {
           promise = this.tracker.newPromise(callback);
+          promise.stack = new Error().stack;      
         } else {
           promise = new Ember.RSVP.Promise(callback);
         }
         return promise;
       }
     });
+
     __exports__.Storage = Storage;
   });
 define("ember-pouchdb",
