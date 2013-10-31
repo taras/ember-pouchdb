@@ -7,10 +7,8 @@
     "jquery": "~1.9.1",
     "qunit": "~1.12.0",
     "ember": "~1.1.2",
-    "pouchdb-nightly.js": "http://download.pouchdb.com/pouchdb-nightly.js"
-  },
-  "devDependancies": {
-    "ember-canary": "http://builds.emberjs.com.s3.amazonaws.com/canary/ember.js"
+    "pouchdb-nightly.js": "http://download.pouchdb.com/pouchdb-nightly.js",
+    "ember-canary": "http://builds.emberjs.com.s3.amazonaws.com/canary/ember.js"    
   },
   "homepage": "https://github.com/taras/ember-pouchdb",
   "authors": [
