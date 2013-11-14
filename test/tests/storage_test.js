@@ -68,7 +68,7 @@ module('Unit - Storage Operations', {
 });
 
 asyncTest("POST & GET", function(){
-  expect(6);
+  expect(7);
 
   Em.RSVP.all(
     [ 
@@ -85,8 +85,8 @@ asyncTest("POST & GET", function(){
     equal(Em.typeOf(model), 'instance');
     equal(model.constructor, Photo);
     equal(photo.get('title'), model.get('title'));
-  }).then(function(result){
-    ok(true);
+    ok(!Em.isEmpty(model.get('id')));
+    ok(!Em.isEmpty(model.get('rev')));
     start();
   }, function(error){
     QUnit.log(error);

@@ -300,6 +300,11 @@ define("ember-pouchdb/storage",
           } else {
             model = Model.create(doc);
           }
+
+          model.setProperties({id:doc._id, rev:doc._rev});
+          delete model._id;
+          delete model._rev;
+      
           return model;
         };
 
