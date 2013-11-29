@@ -88,7 +88,7 @@ App.PhotosRoute = Ember.Route.extend({
 
 App.PhotoRoute = Ember.Route.extend({
 	model: function(params) {
-		return App.pouch.GET('photo', params.id);
+		return App.pouch.GET(params.id);
 	}
 });
 ```
@@ -154,7 +154,7 @@ export default PhotosRoute;
 ```javascript
 var PhotoRoute = Ember.Route.extend({
 	model: function(params) {
-		return this.pouch.GET('photo', params.id);
+		return this.pouch.GET(params.id);
 	}
 });
 
