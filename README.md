@@ -23,11 +23,9 @@ It is currently tested in:
 
 This library requires PouchDB library to be included in the page before this library.
 
-**PouchDB Nightly**
+**PouchDB**
 
-* [Debug](http://download.pouchdb.com/pouchdb-nightly.js)
-* [Minified](http://download.pouchdb.com/pouchdb-nightly.min.js)
-* [AMD](http://download.pouchdb.com/pouchdb.amd-nightly.js)
+* [Latest via GitHub](https://github.com/pouchdb/pouchdb/releases/latest)
 
 **Ember PouchDB**
 
