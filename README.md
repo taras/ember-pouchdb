@@ -34,7 +34,7 @@ This library requires PouchDB library to be included in the page before this lib
 * [AMD](https://raw.github.com/taras/ember-pouchdb/master/dist/ember-pouchdb.amd.js)
 
 ```html
-<script src="http://download.pouchdb.com/pouchdb-nightly.js"></script>
+<script src="https://github.com/pouchdb/pouchdb/releases/download/2.2.3/pouchdb-2.2.3.js"></script>
 <script src="https://raw.github.com/taras/ember-pouchdb/master/dist/ember-pouchdb.js"></script>
 ```
 
