@@ -99,7 +99,7 @@ Use this method with [Ember App Kit](https://github.com/stefanpenner/ember-app-k
 ```javascript
 import pouchdb_initializer from 'ember-pouchdb/initializer';
 import Photo from 'appkit/models/photo';
-import routes from 'appkit/routes;
+import routes from 'appkit/routes';
 
 var App = Ember.Application.create();
 
