@@ -1,5 +1,7 @@
 # PouchDB Wrapper for Ember.js
 
+**WARNING: this library is deprecated. Use https://github.com/nolanlawson/ember-pouch**
+
 This library adds *promises* to [PouchDB](http://pouchdb.com/) API to make PouchDB easier to use with Ember.js.
 
 PouchDB is a CouchDB inspired database designed for the browser.  It uses IndexedDB in Firefox and Chrome, WebSQL in Safari and Opera and LevelDB in Node.js.
